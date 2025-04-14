@@ -43,6 +43,11 @@ export default function SignUp() {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <h1>Sign Up</h1>
+            <div>
+                <h1>Why make an account?</h1>
+                <p>Eventually, creating an account will allow you to save your bots and compete in tournaments!</p>
+            </div>
             <form style={{ display: "flex", flexDirection: "column", gap: "10px", width: "300px", alignItems: "center" }} onSubmit={signUp}>
                 <label htmlFor="email">Email: </label>
                 <input id="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
