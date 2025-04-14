@@ -1,13 +1,11 @@
 "use client"
 
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import VisualizerCanvas from "../components/VisualizerCanvas";
 import {unzip} from "unzipit";
 
 export default function Visualizer() {
   const [matchData, setMatchData] = useState({});
-  const [file, setFile] = useState<File | null>(null);
-
   interface Entry {
     text: () => Promise<string>;
   }
