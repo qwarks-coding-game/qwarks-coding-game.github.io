@@ -38,8 +38,13 @@ h3 {
   font-size: 24px;
 }
 
-h2, h3, p, li, input {
+h2, h3, p, li, input, label {
   color: #ffffff;
+}
+
+input {
+  border: 2px solid #4AD44B;
+  padding: 10px;
 }
 
 button {
@@ -54,6 +59,10 @@ button {
 
 button:hover {
   background-color: #ffffff;
+}
+
+button:disabled {
+  opacity: 0.5;
 }
 
 .navbar:hover{

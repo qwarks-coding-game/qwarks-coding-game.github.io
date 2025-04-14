@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import Navigation from "./components/Navigation";
+import { AuthProvider } from './context/AuthContext'
 
 const poppins = Poppins({
   weight: "800",
@@ -25,8 +26,10 @@ export default function RootLayout({
         className={`${poppins.className} antialiased`}
       >
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <Navigation/>
-        {children}
+        <AuthProvider>
+            <Navigation/>
+            {children}
+        </AuthProvider>
       </body>
     </html>
   );
