@@ -47,10 +47,10 @@ export default function About() {
       </ol>
 
       <h2>Run a game</h2>
-      <p><i>Before following the instructions below, note that you can click on the window a couple times and hit the Q key to exit the window</i></p>
+      <p><i>Before following the instructions below, note that you can click on the window a couple times and hit the Q key to exit the window.</i></p>
       
       <p>If your installation is successful, you should see a terminal asking you for a player name. Enter <i>exampleplayer</i> and hit enter twice.</p>
-      <p>You should see a window pop up with some square and circles. If you see this, congratulations! You've successfully installed QWARKs. We're working on a quickstart manual.</p>
+      <p>You should see a window pop up with some square and circles. If you see this, congratulations! You've successfully installed QWARKS! We're working on a quickstart manual.</p>
     </div>
   );
 }
