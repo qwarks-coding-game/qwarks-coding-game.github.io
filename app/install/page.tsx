@@ -8,13 +8,13 @@ export default function About() {
       <p>Download the file from below that matches your operating system by clicking on the button.</p>
       <div>
         <button>
-          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/dist-Windows.zip">Windows</a>
+          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/QWARKS-dist-Windows.zip">Windows</a>
         </button>
         <button>
-          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/dist-macOS.zip">MacOS</a>
+          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/QWARKS-dist-macOS.zip">MacOS</a>
         </button>
         <button>
-          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/dist-Linux.zip">Linux</a>
+          <a href="https://qwarks-releases.s3.us-east-1.amazonaws.com/releases/newest/QWARKS-dist-Linux.zip">Linux</a>
         </button>
       </div>
 
