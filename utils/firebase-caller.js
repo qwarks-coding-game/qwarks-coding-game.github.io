@@ -9,7 +9,6 @@ import { getStorage, uploadBytes, ref } from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-console.log("Firebase config:", process.env.NEXT_PUBLIC_FIREBASE_CONFIG);
 const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG ? JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG) : {}; // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

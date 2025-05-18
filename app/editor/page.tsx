@@ -20,7 +20,7 @@ class Player(Template): # Each instance of a Qwark will have its own instance of
         qw = self.qwark # Create a shortcut variable to be able to easily access our Qwark
 
         # Sets the indicator string for debugging purposes. This can be viewed in the visualizer.
-        qw.setIndicatorString(f"I'm a Qwark!")
+        qw.setIndicatorString(f"This is an indicator string.\\nMy energy is {qw.energy} and my location is ({qw.x}, {qw.y})")
 
         # Energizes the location to our right.
         if qw.canEnergize(qw.x + 1, qw.y, qw.energy): # Ensures that the action is valid
