@@ -21,6 +21,7 @@ export default function Navigation() {
             <NavigationElement to="/"><Image src={logo} alt="QWARKS logo" width="50" height="50" /></NavigationElement>
             <NavigationElement to="/">QWARKS</NavigationElement>
             <NavigationElement to="/about">About</NavigationElement>
+            <NavigationElement to="/editor">Editor</NavigationElement>
             <NavigationElement to="/install">Install</NavigationElement>
             {user ? <p onClick={signOut}>{user.email}</p> :
                 <div style={{display: "flex", flexDirection: "row"}}>

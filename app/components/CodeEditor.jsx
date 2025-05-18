@@ -5,8 +5,7 @@ const CodeEditor = ({
     language = "javascript",
     value = "",
     onChange,
-    width = "300px",
-    height = "300px",
+    ...props
 }) => {
     const [code, setCode] = useState(value);
 
@@ -17,8 +16,6 @@ const CodeEditor = ({
 
     return (
         <Editor
-            width={width}
-            height={height}
             language={language}
             theme="vs-dark"
             value={code}
@@ -30,6 +27,7 @@ const CodeEditor = ({
                 automaticLayout: true,
                 lineNumbers: "on",
             }}
+            {...props}
         />
     );
 };

@@ -1,9 +1,13 @@
+import Link from 'next/link';
+
 export default function Install() {
    return (
       <div>
          <h1>
             Installing QWARKS
          </h1>
+         <h2>Online Editor</h2>
+         <p>Instead of installing, you can write and test bots inside of your browser with our <Link href="/editor">online editor</Link>!</p>
          <h2>Download ZIP</h2>
          <p>Download the file from below that matches your operating system by clicking on the button.</p>
          <div>

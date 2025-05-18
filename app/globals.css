@@ -38,13 +38,18 @@ h3 {
   font-size: 24px;
 }
 
-h2, h3, p, li, input, label {
+h2, h3, p, li, input, label, option, select {
   color: #ffffff;
 }
 
 input {
   border: 2px solid #4AD44B;
   padding: 10px;
+}
+
+select {
+    text-align: center;
+    background-color: black;
 }
 
 button {

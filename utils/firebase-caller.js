@@ -1,28 +1,26 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc, getFirestore } from "firebase/firestore"; 
+import { getStorage, uploadBytes, ref } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyDTmWRz0vlNpBoCamRoZ7pdz5nzxFzpYMc",
-    authDomain: "qwarks-89c09.firebaseapp.com",
-    projectId: "qwarks-89c09",
-    storageBucket: "qwarks-89c09.firebasestorage.app",
-    messagingSenderId: "240969688862",
-    appId: "1:240969688862:web:82b7d9aa521a2d15948b0f",
-    measurementId: "G-JHQDNG49T7"
-};
-
-// Initialize Firebase
+const firebaseConfig = process.env.NEXT_PUBLIC_FIREBASE_CONFIG ? JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG) : {}; // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+// Initialize Cloud Storage and get a reference to the service
+const storage = getStorage(app);
 
 async function createAccount(email, password) {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "users", email), {
+        bots: []
+    });
     return userCredential.user;
 }
 
@@ -35,5 +33,45 @@ async function signOut() {
     await auth.signOut();
 }
 
-export { createAccount, signIn, signOut };
+async function getUserInfo() {
+    if (!auth.currentUser) {
+        return null;
+    }
+    const userDoc = await getDoc(doc(db, "users", auth.currentUser.email));
+    if (userDoc.exists()) {
+        return userDoc.data();
+    } else {
+        return null;
+    }
+}
+
+async function createBot(bot) {
+    const email = auth.currentUser.email;
+    if (!email) {
+        console.log("No authenticated user found");
+        return;
+    }
+    const userDoc = await getDoc(doc(db, "users", email));
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const bots = userData.bots || [];
+        bots.push(bot);
+        await setDoc(doc(db, "users", email), { bots });
+    } else {
+        console.log("User does not exist");
+    }
+}
+
+async function uploadBot(bot, file) {
+    const email = auth.currentUser.email;
+    if (!email) {
+        console.log("No authenticated user found");
+        return;
+    }
+    // Upload the bot to Firebase Storage
+    const storageRef = ref(storage, `bots/${bot}.zip`);
+    await uploadBytes(storageRef, file);
+}
+
+export { createAccount, signIn, signOut, getUserInfo, createBot, uploadBot };
 export default app;
