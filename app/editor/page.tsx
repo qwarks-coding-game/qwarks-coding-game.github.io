@@ -3,10 +3,11 @@
 import { useContext, useEffect, useState } from "react";
 import VisualizerCanvas from "../components/VisualizerCanvas";
 import CodeEditor from "../components/CodeEditor";
-import { createBot, getUserInfo, uploadBot } from "@/utils/firebase-caller";
-import {zipTextToBytes, unzipBlobToJSON} from "@/utils/zip-file";
+import { getUserInfo, uploadBot, downloadBot, setMatchCallback, downloadMatch } from "@/utils/firebase-caller";
+import {zipTextToBytes, unzipBlobToJSON, unzipBlobToCode} from "@/utils/zip-file";
 import {requestMatch} from "@/utils/match-server";
 import { AuthContext } from "../context/AuthContext";
+import { DocumentData } from "firebase/firestore";
 
 const TEMPLATE_PLAYER = `from template import Player as Template
 from qwark import Qwark
@@ -34,6 +35,8 @@ export default function Editor() {
     const [selectedBot, setSelectedBot] = useState("");
     const [running, setRunning] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [matchId, setMatchId] = useState("");
+    const [roundNum, setRoundNum] = useState(0);
 
     interface Bot {
         id: string;
@@ -55,20 +58,45 @@ export default function Editor() {
         fetchPlayerData();
     }, [user]);
 
+    useEffect(() => {
+        if (selectedBot) {
+            const fetchBot = async () => {
+                const bot = await downloadBot(selectedBot);
+                if (bot) {
+                    const code = await unzipBlobToCode(bot);
+                    setCode(code);
+                }
+            };
+            fetchBot();
+        }
+    }, [selectedBot]);
+
     const saveBot = async () => {
         setSaving(true);
         await uploadBot(selectedBot, await zipTextToBytes(code, "player.py"))
         setSaving(false);
     }
     
-
     const runMatch = async () => {
         setRunning(true);
-        const match = await requestMatch([selectedBot, "exampleplayer"]);
-        const data = await unzipBlobToJSON(await match.blob());
-        console.log(data);
-        setMatchData(data);
-        setRunning(false);
+        const matchId = await requestMatch([selectedBot, "exampleplayer"]);
+        setMatchId(matchId);
+        setMatchCallback(matchId, async (response: DocumentData) => {
+            if (response.status === "running") {
+                setRoundNum(response.roundNum);
+                return;
+            }
+            if (response.status === "created") {
+                setRoundNum(1);
+                return;
+            }
+            console.log("Match finished:", response);
+            const matchBlob = await downloadMatch(response.matchName);
+            const data = await unzipBlobToJSON(matchBlob);
+            console.log(data);
+            setMatchData(data);
+            setRunning(false);
+        });
     }
 
     return (
@@ -120,7 +148,7 @@ export default function Editor() {
                     disabled={selectedBot == ""}
                     onClick={runMatch}
                 >
-                    {running ? "Running Match..." : "Test (vs exampleplayer)"}
+                    {running ? (roundNum == 0 ? `Creating Match...` : `Running Match: Round ${roundNum}`) : "Test (vs exampleplayer)"}
                 </button>
             </div>
         </div>

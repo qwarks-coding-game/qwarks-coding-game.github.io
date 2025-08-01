@@ -8,11 +8,20 @@ async function zipTextToBytes(text, filename) {
     return content;
 }
 
-async function unzipBlobToJSON(blob) {
+
+async function unzipBlob(blob, filename) {
     const zip = new JSZip();
     const content = await zip.loadAsync(blob);
-    const jsonFile = await content.file("match.json").async("string");
-    return JSON.parse(jsonFile);
+    const text = await content.file(filename).async("string");
+    return text;
 }
 
-export { zipTextToBytes, unzipBlobToJSON };
+async function unzipBlobToJSON(blob) {
+    return JSON.parse(await unzipBlob(blob, "match.json"));
+}
+
+async function unzipBlobToCode(blob) {
+    return await unzipBlob(blob, "player.py");
+}
+
+export { zipTextToBytes, unzipBlob, unzipBlobToJSON, unzipBlobToCode };

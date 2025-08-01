@@ -7,8 +7,8 @@ export default function Home() {
     <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
       <div style={{ position: 'fixed', width: '100vw', height: '100vh', overflow: 'hidden', top: 0, zIndex: -1}}>
         <Image src={background} alt={"An example QWARKS game"}
-        layout="fill"
-        objectFit="cover"/>
+        style={{objectFit: "cover"}}
+        fill={true}/>
       </div>
       <h1>Strategize. Code. Win.</h1>
       <div style={{width: "50vw"}}>

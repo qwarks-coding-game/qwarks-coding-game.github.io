@@ -22,6 +22,7 @@ export default function Navigation() {
             <NavigationElement to="/">QWARKS</NavigationElement>
             <NavigationElement to="/about">About</NavigationElement>
             <NavigationElement to="/editor">Editor</NavigationElement>
+            {user ? <NavigationElement to="/bots">My Bots</NavigationElement> : null}
             <NavigationElement to="/install">Install</NavigationElement>
             {user ? <p onClick={signOut}>{user.email}</p> :
                 <div style={{display: "flex", flexDirection: "row"}}>
