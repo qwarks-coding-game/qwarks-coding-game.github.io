@@ -22,23 +22,29 @@ export default function VisualizerCanvas({ match, ...props }) {
 
     // Initialize match data if available:
     useEffect(() => {
-        if (!match || !match.rounds || !match.rounds[0]) return;
+        if (!match || !match.rounds || !match.rounds[0]) {
+            canvasState.current.roundNum = 0;
+            canvasState.current.rounds = [];
+            return;
+        }
+
+        // See if the match has updated yet
+        if (canvasState.current.rounds.length == 0) {
+            // Center camera
+            const canvasSize = canvasRef.current.getBoundingClientRect();
+            const ZOOM_DIVISOR = Math.pow(2, canvasState.current.cameraZoom - 1);
+            const DRAW_SIZE = Math.floor(50 / ZOOM_DIVISOR);
+            canvasState.current.cameraOffset = [
+                match.rounds[0].qwarks[0].x * DRAW_SIZE - canvasSize.width / 2,
+                match.rounds[0].qwarks[0].y * DRAW_SIZE - canvasSize.height / 2,
+            ];
+        }
+        
         // Directly store match data in canvasState current:
         canvasState.current.energySources = match.rounds[0].energySources || {};
         canvasState.current.rounds = match.rounds;
         canvasState.current.teams = match.teams || [];
-        canvasState.current.roundNum = 0;
         canvasState.current.matchLoaded = true;
-        canvasState.current.autorun = false;
-
-        // Center camera
-        const canvasSize = canvasRef.current.getBoundingClientRect();
-        const ZOOM_DIVISOR = Math.pow(2, canvasState.current.cameraZoom - 1);
-        const DRAW_SIZE = Math.floor(50 / ZOOM_DIVISOR);
-        canvasState.current.cameraOffset = [
-            match.rounds[0].qwarks[0].x * DRAW_SIZE - canvasSize.width / 2,
-            match.rounds[0].qwarks[0].y * DRAW_SIZE - canvasSize.height / 2,
-        ];
     }, [match]);
 
     const getFontForText = (text, overrideZoom = 0) => {

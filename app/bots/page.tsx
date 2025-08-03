@@ -64,6 +64,7 @@ export default function Editor() {
                 return (
                     <h2 key={bot.id} style={{ margin: "10px" }}>
                         {bot.name}
+                        {/* TODO: Show when the bot was last updated */}
                     </h2>
                 );
             })}

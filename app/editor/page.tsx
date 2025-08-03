@@ -37,6 +37,7 @@ export default function Editor() {
     const [saving, setSaving] = useState(false);
     const [matchId, setMatchId] = useState("");
     const [roundNum, setRoundNum] = useState(0);
+    const [receivedInitialData, setReceivedInitialData] = useState(false);
 
     interface Bot {
         id: string;
@@ -76,14 +77,23 @@ export default function Editor() {
         await uploadBot(selectedBot, await zipTextToBytes(code, "player.py"))
         setSaving(false);
     }
+
+    const downloadMatchFromName = async (matchName: string) => {
+        const matchBlob = await downloadMatch(matchName);
+        const data = await unzipBlobToJSON(matchBlob);
+        setMatchData({...data});
+    }
     
     const runMatch = async () => {
+        setMatchData({});
         setRunning(true);
         const matchId = await requestMatch([selectedBot, "exampleplayer"]);
         setMatchId(matchId);
         setMatchCallback(matchId, async (response: DocumentData) => {
             if (response.status === "running") {
+                setReceivedInitialData(true);
                 setRoundNum(response.roundNum);
+                downloadMatchFromName(response.matchName);
                 return;
             }
             if (response.status === "created") {
@@ -91,10 +101,7 @@ export default function Editor() {
                 return;
             }
             console.log("Match finished:", response);
-            const matchBlob = await downloadMatch(response.matchName);
-            const data = await unzipBlobToJSON(matchBlob);
-            console.log(data);
-            setMatchData(data);
+            downloadMatchFromName(response.matchName);
             setRunning(false);
         });
     }
@@ -122,8 +129,7 @@ export default function Editor() {
                     language="python"
                     value={code}
                     onChange={setCode}
-                    width={"50vw"}
-                    style={{flex: 1}}
+                    width={"45vw"}
                 />
                 <select
                     onChange={(e) => setSelectedBot(e.target.value)}
@@ -142,13 +148,13 @@ export default function Editor() {
                     disabled={selectedBot == ""}
                     onClick={async () => {saveBot()}}
                 >
-                    {saving ? "Saving..." : "Save!"}
+                    {saving ? "Saving..." : "Save"}
                 </button>
                 <button
                     disabled={selectedBot == ""}
                     onClick={runMatch}
                 >
-                    {running ? (roundNum == 0 ? `Creating Match...` : `Running Match: Round ${roundNum}`) : "Test (vs exampleplayer)"}
+                    {running ? (roundNum == 0 ? `Creating Match...` : `Running Match: Round ${roundNum}`) : "Test"}
                 </button>
             </div>
         </div>

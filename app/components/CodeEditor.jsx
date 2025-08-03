@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Editor from "@monaco-editor/react";
+import CodeMirror from "@uiw/react-codemirror";
+import { python } from "@codemirror/lang-python";
 
 const CodeEditor = ({
-    language = "javascript",
+    language = "python",
     value = "",
     onChange,
     ...props
@@ -15,18 +16,14 @@ const CodeEditor = ({
     };
 
     return (
-        <Editor
-            language={language}
-            theme="vs-dark"
+        <CodeMirror
+            extensions={[python()]}
             value={code}
             onChange={handleChange}
-            options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                wordWrap: "on",
-                automaticLayout: true,
-                lineNumbers: "on",
-            }}
+            fontSize={14}
+            width="100%"
+            style={{textAlign: "left"}}
+            theme={"dark"}
             {...props}
         />
     );
